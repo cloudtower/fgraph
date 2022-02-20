@@ -49,6 +49,12 @@ var drag_line = svg.append('svg:path')
 var labelsGroup = svg.append('svg:g')
     .attr("id", "labels");
 
+var linksGroup = svg.append('svg:g')
+    .attr("id", "links");
+
+var nodesGroup = svg.append('svg:g')
+    .attr("id", "nodes");
+
 fetch_data();
 
 function refresh(error, json) {
@@ -65,7 +71,7 @@ function refresh(error, json) {
 
     var color_nodes = d3.scale.category20();
     var color_links = d3.scale.category10();
-    var link = svg.selectAll(".link")
+    var link = linksGroup.selectAll(".link")
         .data(json.links);
 
     link.exit().remove();
@@ -73,7 +79,7 @@ function refresh(error, json) {
         .append("line")
         .attr("class", "link");
 
-    var linkoverlay = svg.selectAll(".linkoverlay")
+    var linkoverlay = linksGroup.selectAll(".linkoverlay")
         .data(json.links);
 
     linkoverlay.enter()
@@ -131,7 +137,7 @@ function refresh(error, json) {
         .attr("y", function(d) { return (d.source.y + (d.target.y - d.source.y) * 0.5); })
         .text(function (d) { return d.comment === undefined ? "" : d.comment })
 
-    var node = svg.selectAll(".node")
+    var node = nodesGroup.selectAll(".node")
         .data(json.nodes);
         
     node.exit().remove();
