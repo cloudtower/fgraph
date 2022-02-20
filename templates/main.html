@@ -17,8 +17,6 @@
                 <div class="form">
                     <select id="linkedit_linktypes" name="type"></select>
                     <input id="linkedit_value" type="number" value="40" min="0" max="100">
-                    <input id="linkedit_invis" type="checkbox" name="invis" class="checkbox">
-                    <label for="linkedit_invis" style="margin-right: 5px">Unsichtbar?</label>
                 </div>
             </div>
 
@@ -34,19 +32,19 @@
                         <input id="addnode_name" name="name" placeholder="Name">
                         <select id="nodetypes" name="group"></select>
                         <input id="addnode_comment" name="comment" placeholder="Comment...">
-                        <input class="btn" type="submit" value="Person hinzufügen">
+                        <input class="btn" type="submit" value="Add person">
                     </form>
                 </div>
                 <div class="form">
                     <form action="/api/addnodetype" onsubmit="add_nodetype(event, this)">
-                        <input id="addnodtype_name" name="type" placeholder="Personenkategorie">
-                        <input class="btn" type="submit" value="Kategorie hinzufügen">
+                        <input id="addnodtype_name" name="type" placeholder="Group of People...">
+                        <input class="btn" type="submit" value="Add Group">
                     </form>
                 </div>
                 <div class="form">
                     <form action="/api/addlinktype" onsubmit="add_nodetype(event, this)">
-                        <input id="addlinktype_name" name="type" placeholder="Verhältniskategorie">
-                        <input class="btn" type="submit" value="Kategorie hinzufügen">
+                        <input id="addlinktype_name" name="type" placeholder="Type of Relation...">
+                        <input class="btn" type="submit" value="Add Category">
                     </form>
                 </div>
             </div>
@@ -59,11 +57,11 @@
                             <select id="node_property_group" id="nodetypes" name="group"></select>
                             <input id="node_property_comment" name="comment" placeholder="Comment...">
                             <input id="node_property_id" hidden name="id" value="0">
-                            <input class="btn" type="submit" value="Änderung übernehmen">
+                            <input class="btn" type="submit" value="Apply Change">
                         </form>
                         <form action="/api/deletenode" onsubmit="delete_node(event, this)">
                             <input id="node_property_id_delete" hidden name="id" value="0">
-                            <input class="btn red" type="submit" value="Person löschen">
+                            <input class="btn red" type="submit" value="Delete Person">
                         </form>
                     </div>
                 </div>
@@ -77,11 +75,11 @@
                             <input id="link_property_id" hidden name="id" value="0">
                             <input id="link_property_source" hidden name="source" value="0">
                             <input id="link_property_target" hidden name="target" value="0">
-                            <input class="btn" type="submit" value="Änderung übernehmen">
+                            <input class="btn" type="submit" value="Apply Change">
                         </form>
                         <form action="/api/deletelink" onsubmit="delete_link(event, this)">
                             <input id="link_property_id_delete" hidden name="id" value="0">
-                            <input class="btn red" type="submit" value="Link löschen">
+                            <input class="btn red" type="submit" value="Delete Relation">
                         </form>
                     </div>
                 </div>
@@ -95,10 +93,10 @@
                                 <td class="desc">Name</td><td id="info_name"></td>
                             </tr>
                             <tr>
-                                <td class="desc">Gruppe</td><td id="info_group"></td>
+                                <td class="desc">Group</td><td id="info_group"></td>
                             </tr>
                             <tr>
-                                <td class="desc">Kommentar</td><td id="info_comment_node"></td>
+                                <td class="desc">Comment</td><td id="info_comment_node"></td>
                             </tr>
                         </table>
                     </div>
@@ -108,13 +106,13 @@
                     <div class="form">
                         <table>
                             <tr>
-                                <td class="desc">Typ</td><td id="info_type"></td>
+                                <td class="desc">Type</td><td id="info_type"></td>
                             </tr>
                             <tr>
-                                <td class="desc">Stärke</td><td id="info_value"></td>
+                                <td class="desc">Strength</td><td id="info_value"></td>
                             </tr>
                             <tr>
-                                <td class="desc">Kommentar</td><td id="info_comment_link"></td>
+                                <td class="desc">Comment</td><td id="info_comment_link"></td>
                             </tr>
                         </table>
                     </div>

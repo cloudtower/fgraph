@@ -1,5 +1,6 @@
 mode = 0;
 editMode = false;
+session = window.location.href.split("/").splice(-1);
 
 window.onload = function () {
     get_metadata();
@@ -12,7 +13,7 @@ window.onload = function () {
 // Utility functions
 
 function get_metadata() {
-    fetch("/api/getdata")
+    fetch(`/api/${session}/metadata`)
     .then(response => response.json())
     .then(data => {
         arrayToOptions(data["linktypes"], document.getElementById("linkedit_linktypes"))
@@ -48,7 +49,7 @@ function filterOptions(options, value) {
 }
 
 function send_form(event, form, callback, cbargument, fetchcbs, fetchcbargs) {
-    send(form.action, new FormData(form), callback, cbargument, fetchcbs, fetchcbargs);
+    send(form.action.replace("api", `api/${session}`), new FormData(form), callback, cbargument, fetchcbs, fetchcbargs);
     event.preventDefault();
 }
 
@@ -79,7 +80,7 @@ function send(url, data, callbacks, cbarguments, fetchcbs, fetchcbargs) {
 }
 
 function fetch_data() {
-    fetch("data")
+    fetch(`/api/${session}/data`)
         .then(res => res.json())
         .then(res => {
             jsonData = res;
@@ -193,7 +194,7 @@ function add_link(source, target, value, type) {
         form_data.append(key, data[key]);
     }
 
-    send("/api/addlink", form_data);
+    send(`/api/${session}/addlink`, form_data);
     refresh(null, jsonData);
 }
 
