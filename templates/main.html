@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+    <link rel="stylesheet" href="static/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <div>
+        <div id="headbar">
+            <div>
+                <i class="fa-solid fa-pencil switch switch-left" id="sw_editmode" onclick="switch_mode(1)"></i>
+                <i class="fa-solid fa-image switch switch-middle" id="sw_staticmode" onclick="switch_mode(2)"></i>
+                <i class="fa-solid fa-hand switch switch-middle active" id="sw_panmode" onclick="switch_mode(0)"></i>
+            </div>
+
+            <div id="linkedit_settings" class="card" style="display: none">
+                <div class="form">
+                    <select id="linkedit_linktypes" name="type"></select>
+                    <input id="linkedit_value" type="number" value="40" min="0" max="100">
+                    <input id="linkedit_invis" type="checkbox" name="invis" class="checkbox">
+                    <label for="linkedit_invis" style="margin-right: 5px">Unsichtbar?</label>
+                </div>
+            </div>
+
+            <div id="download_wrap" style="display: none; margin-left: 10px;">
+                <i class="fa-solid fa-download switch switch-right" onclick="export_svg()"></i>
+                <a href="" id="download_link"></a>
+            </div>
+        </div>
+        <div id="sidebar">
+            <div id="add_card" class="card" style="display: none">
+                <div class="form">
+                    <form action="/api/addnode" onsubmit="add_node(event, this)">
+                        <input id="addnode_name" name="name" placeholder="Name">
+                        <select id="nodetypes" name="group"></select>
+                        <input id="addnode_comment" name="comment" placeholder="Comment...">
+                        <input class="btn" type="submit" value="Person hinzufügen">
+                    </form>
+                </div>
+                <div class="form">
+                    <form action="/api/addnodetype" onsubmit="add_nodetype(event, this)">
+                        <input id="addnodtype_name" name="type" placeholder="Personenkategorie">
+                        <input class="btn" type="submit" value="Kategorie hinzufügen">
+                    </form>
+                </div>
+                <div class="form">
+                    <form action="/api/addlinktype" onsubmit="add_nodetype(event, this)">
+                        <input id="addlinktype_name" name="type" placeholder="Verhältniskategorie">
+                        <input class="btn" type="submit" value="Kategorie hinzufügen">
+                    </form>
+                </div>
+            </div>
+
+            <div id="edit_card">
+                <div id="node_properties" class="card">
+                    <div class="form form-inline">
+                        <form action="/api/addnode" onsubmit="edit_node(event, this)">
+                            <input id="node_property_name" name="name" placeholder="Name">
+                            <select id="node_property_group" id="nodetypes" name="group"></select>
+                            <input id="node_property_comment" name="comment" placeholder="Comment...">
+                            <input id="node_property_id" hidden name="id" value="0">
+                            <input class="btn" type="submit" value="Änderung übernehmen">
+                        </form>
+                        <form action="/api/deletenode" onsubmit="delete_node(event, this)">
+                            <input id="node_property_id_delete" hidden name="id" value="0">
+                            <input class="btn red" type="submit" value="Person löschen">
+                        </form>
+                    </div>
+                </div>
+        
+                <div id="link_properties" class="card">
+                    <div class="form form-inline">
+                        <form action="/api/addlink" onsubmit="edit_link(event, this)">
+                            <select id="link_property_type" name="type"></select>
+                            <input id="link_property_value" type="number" name="value" value="40" min="0" max="100">
+                            <input id="link_property_comment" name="comment" placeholder="Comment...">
+                            <input id="link_property_id" hidden name="id" value="0">
+                            <input id="link_property_source" hidden name="source" value="0">
+                            <input id="link_property_target" hidden name="target" value="0">
+                            <input class="btn" type="submit" value="Änderung übernehmen">
+                        </form>
+                        <form action="/api/deletelink" onsubmit="delete_link(event, this)">
+                            <input id="link_property_id_delete" hidden name="id" value="0">
+                            <input class="btn red" type="submit" value="Link löschen">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div id="info_card">
+                <div id="node_info" class="card">
+                    <div class="form">
+                        <table>
+                            <tr>
+                                <td class="desc">Name</td><td id="info_name"></td>
+                            </tr>
+                            <tr>
+                                <td class="desc">Gruppe</td><td id="info_group"></td>
+                            </tr>
+                            <tr>
+                                <td class="desc">Kommentar</td><td id="info_comment_node"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="link_info" class="card">
+                    <div class="form">
+                        <table>
+                            <tr>
+                                <td class="desc">Typ</td><td id="info_type"></td>
+                            </tr>
+                            <tr>
+                                <td class="desc">Stärke</td><td id="info_value"></td>
+                            </tr>
+                            <tr>
+                                <td class="desc">Kommentar</td><td id="info_comment_link"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="svgContainer" />
+    </div>
+
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <script src="static/main.js"></script>
+    <script src="static/graph.js"></script>
+</body>
