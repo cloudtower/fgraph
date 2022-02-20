@@ -211,7 +211,7 @@ function add_node(event, form) {
 }
 
 function add_nodetype(event, form) {
-    send_form(event, form, [clear_input], [['addnodtype_name']], [get_metadata], [undefined]);
+    send_form(event, form, [clear_input], [['addnodetype_name']], [get_metadata], [undefined]);
 }
 
 function add_linktype(event, form) {
