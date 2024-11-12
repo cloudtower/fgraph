@@ -20,6 +20,7 @@ function get_metadata() {
         arrayToOptions(data["linktypes"], document.getElementById("link_property_type"))
         arrayToOptions(data["nodetypes"], document.getElementById("nodetypes"))
         arrayToOptions(data["nodetypes"], document.getElementById("node_property_group"))
+        updateLegend(data["nodetypes"], data["linktypes"])
     });
 }
 
@@ -38,6 +39,46 @@ function arrayToOptions(data, parent) {
         option.innerHTML = el[1];
         parent.appendChild(option);
     })
+}
+
+function updateLegend(nodetypes, linktypes) {
+    var color_links = d3.scale.category10();
+    var color_nodes = d3.scale.category20();
+    var legend_nodes = document.getElementById("legend_nodes")
+    var legend_links = document.getElementById("legend_links")
+    legend_nodes.innerHTML = "";
+    legend_links.innerHTML = "";
+
+    for (i in nodetypes) {
+        var data = nodetypes[i][1];
+        var node_wrap = document.createElement("p");
+        node_wrap.style = "display: flex; margin: 0"
+        var circ = document.createElement("p");
+        circ.innerHTML = "•";
+        circ.style = "font-size: 30px; height: 15px; margin: 7px; color: " + color_nodes(i)
+        var node_name = document.createElement("p");
+        node_name.style = "font-size: 15px; margin: 15px 0px 15px 0px;"
+        
+        node_name.innerHTML = data;
+        node_wrap.appendChild(circ)
+        node_wrap.appendChild(node_name)
+        legend_nodes.appendChild(node_wrap)
+    }
+
+    for (i in linktypes) {
+        var data = linktypes[i][1];
+        var node_wrap = document.createElement("p");
+        node_wrap.style = "display: flex; margin: 0"
+        var circ = document.createElement("p");
+        circ.style = "border-radius: 8px; border: 3px solid; width: 15px; height: 0px; margin: 20px 15px 15px 15px; color: " + color_links(i)
+        var node_name = document.createElement("p");
+        node_name.style = "font-size: 15px; margin: 15px 0px 15px 0px;"
+        
+        node_name.innerHTML = data;
+        node_wrap.appendChild(circ)
+        node_wrap.appendChild(node_name)
+        legend_links.appendChild(node_wrap)
+    }
 }
 
 function filterOptions(options, value) {
@@ -106,6 +147,7 @@ function switch_mode(mode) {
     var editmode_settings = document.getElementById("linkedit_settings");
     var add_settings = document.getElementById("add_card");
     var export_wrap = document.getElementById("download_wrap");
+    var legend_wrap = document.getElementById("legend_wrap");
 
     switch (mode) {
         case 0:
@@ -147,6 +189,7 @@ function switch_mode(mode) {
 
     if (mode == 2) {
         export_wrap.style.display = "block";
+        legend_wrap.style.display = "block";
         force
             .gravity(0)
             .linkStrength(d => 0)
@@ -155,6 +198,7 @@ function switch_mode(mode) {
             .start();
     } else {
         export_wrap.style.display = "none";
+        legend_wrap.style.display = "none";
         force
             .gravity(0.05)
             .linkStrength(d => {
@@ -257,6 +301,7 @@ function export_svg() {
     var svgData = document.getElementById("svgImage");
     var serializer = new XMLSerializer();
     var source = serializer.serializeToString(svgData);
+    var legend = document.getElementById("legend_wrap");
 
     //add name spaces.
     if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
@@ -266,7 +311,8 @@ function export_svg() {
         source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
     }
 
-    source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
+    source = '<?xml version="1.0" standalone="no"?>\r\n' + source.substring(0, source.length - 6);
+    source += '<foreignObject x="50" y="50" height="1000px" width="1000px"><div xmlns="http://www.w3.org/1999/xhtml">' + legend.innerHTML + "</div></foreignObject></svg>"
     var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
     var link = document.getElementById("download_link");
     link.href = url;
