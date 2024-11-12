@@ -82,7 +82,7 @@ def add_link(id):
     source = int(request.form.get("source"))
     target = int(request.form.get("target"))
     link_type = int(request.form.get("type"))
-    value = float(request.form.get("value")) / 10
+    value = max(1.0, float(request.form.get("value")) / 10)
     comment = request.form.get("comment")
     comment = "" if not comment else comment
     linkid = request.form.get("id")
