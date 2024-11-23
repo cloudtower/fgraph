@@ -5,7 +5,7 @@
             function add_instance(event, form) {
                 event.preventDefault();
                 var data = new FormData(form);
-                fetch("/api/addinstance", {method: 'post', body: data}).then(res => res.text()).then(res => {
+                fetch("./api/addinstance", {method: 'post', body: data}).then(res => res.text()).then(res => {
                     if (res == "Success") {
                         document.location = "/" + data.get("name");
                     } else {
@@ -28,7 +28,7 @@
         <h1>Create new Instance</h1>
         <p>Create your own, new instance. If you don't want anyone else to see it, check the box and give it a name that no one can guess. This way, only someone with access to the server backend (and you, of course), can see it!</p>
         <div>
-            <form action="/api/addinstance" onsubmit="add_instance(event, this)">
+            <form action="./api/addinstance" onsubmit="add_instance(event, this)">
                 <div class="form-group">
                     <label for="instance_name">Name: </label>
                     <input id="instance_name" class="col-sm-2 form-control" type="text" name="name">
