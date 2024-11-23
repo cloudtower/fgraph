@@ -16,7 +16,7 @@
             <div id="linkedit_settings" class="card" style="display: none">
                 <div class="form">
                     <select id="linkedit_linktypes" name="type"></select>
-                    <input id="linkedit_value" type="number" value="40" min="0" max="100">
+                    <input id="linkedit_value" type="number" value="40" min="1" max="100">
                 </div>
             </div>
 
@@ -70,7 +70,7 @@
                     <div class="form form-inline">
                         <form action="./api/addlink" onsubmit="edit_link(event, this)">
                             <select id="link_property_type" name="type"></select>
-                            <input id="link_property_value" type="number" name="value" value="40" min="0" max="100">
+                            <input id="link_property_value" type="number" name="value" value="40" min="1" max="100">
                             <input id="link_property_comment" name="comment" placeholder="Comment...">
                             <input id="link_property_id" hidden name="id" value="0">
                             <input id="link_property_source" hidden name="source" value="0">
