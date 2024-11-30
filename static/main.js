@@ -218,7 +218,7 @@ function switch_mode(mode) {
 // Data manipulation functions
 
 function add_link(source, target, value, type) {
-    value = Math.max(10.0, value);
+    value = Math.max(1.0, value);
 
     jsonData.links.push({
         "source": source,
@@ -279,7 +279,7 @@ function edit_link(event, form) {
     data = new FormData(form);
     link_edit = jsonData.links[data.get("id")]
     link_edit["type"] = data.get("type");
-    link_edit["value"] = Math.max(1.0, data.get("value") / 10);
+    link_edit["value"] = Math.max(0.1, data.get("value") / 10);
     link_edit["dist"] = 1 / data.get("value") * 3000;
     link_edit["comment"] = data.get("comment");
 
