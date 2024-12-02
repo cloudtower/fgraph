@@ -39,8 +39,8 @@ def add_instance():
     data_default = {
         "links": [],
         "nodes": [],
-        "linktypes": ["Friendship", "Relationship", "Roommate", "Fellow Student", "Co-Worker", "Acquaintance", "Family"],
-        "nodetypes": ["Me", "Family", "Friends", "Work"]
+        "linktypes": {0: "Friendship", 1: "Relationship", 2: "Co-Worker", 3: "Family"},
+        "nodetypes": {0: "Me", 1: "Family", 2: "Co-Workers", 3: "Friends"}
     }
 
     sessions[name] = data_default
@@ -61,8 +61,8 @@ def get_data(id):
 
     return json.dumps({
         "names": list(sorted([(i, el["name"]) for i, el in enumerate(sessions[id]["nodes"])], key=lambda x: x[1])),
-        "linktypes": list(sorted(enumerate(sessions[id]["linktypes"]), key=lambda x: x[1])),
-        "nodetypes": list(sorted(enumerate(sessions[id]["nodetypes"]), key=lambda x: x[1]))
+        "linktypes": list(sorted(sessions[id]["linktypes"].items(), key=lambda x: x[1])),
+        "nodetypes": list(sorted(sessions[id]["nodetypes"].items(), key=lambda x: x[1]))
     })
 
 
@@ -142,7 +142,8 @@ def add_nodetype(id):
         return redirect("new")
 
     nodetype = request.form.get("type")
-    sessions[id]["nodetypes"].append(nodetype)
+    newtype = str(list(filter(lambda x: not str(x) in sessions[id]["nodetypes"], range(0, max([int(el) for el in sessions[id]["nodetypes"]]) + 2))))
+    sessions[id]["nodetypes"][newtype] = nodetype
     write_changes(id)
     return "Success"
 
@@ -153,9 +154,47 @@ def add_linktype(id):
         return redirect("new")
 
     linktype = request.form.get("type")
-    sessions[id]["linktypes"].append(linktype)
+    newtype = str(list(filter(lambda x: not str(x) in sessions[id]["linktypes"], range(0, max([int(el) for el in sessions[id]["linktypes"]]) + 2)))[0])
+    sessions[id]["linktypes"][newtype] = linktype
     write_changes(id)
     return "Success"
+
+
+@server.route("/api/<id>/deletenodetype", methods=["POST"])
+def delete_nodetype(id):
+    if not id in sessions:
+        return redirect("new")
+
+    nodetype = request.form.get("type")
+    if not nodetype in sessions[id]["nodetypes"]:
+        return "Failure"
+    
+    nodes = list(filter(lambda x: x["group"] == nodetype, sessions[id]["nodes"]))
+    if nodes:
+        return "Warning, group is not empty! Members" + ", ".join([el["name"] for el in nodes])
+    else:
+        del sessions[id]["nodetypes"][nodetype]
+        write_changes(id)
+        return "Success"
+
+
+@server.route("/api/<id>/deletelinktype", methods=["POST"])
+def delete_linktype(id):
+    if not id in sessions:
+        return redirect("new")
+
+    linktype = request.form.get("type")
+    print(linktype, sessions[id]["linktypes"])
+    if not linktype in sessions[id]["linktypes"]:
+        return "Failure"
+    
+    links = list(filter(lambda x: x["type"] == int(linktype), sessions[id]["links"]))
+    if links:
+        return "Warning, link type is not unused! " + ", ".join([f"{sessions[id]['nodes'][el['source']]['name']} -> {sessions[id]['nodes'][el['target']]['name']}" for el in links])
+    else:
+        del sessions[id]["linktypes"][linktype]
+        write_changes(id)
+        return "Success"
 
 
 @server.route("/api/<id>/deletelink", methods=["POST"])

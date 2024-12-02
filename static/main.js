@@ -18,8 +18,10 @@ function get_metadata() {
     .then(data => {
         arrayToOptions(data["linktypes"], document.getElementById("linkedit_linktypes"))
         arrayToOptions(data["linktypes"], document.getElementById("link_property_type"))
+        arrayToOptions(data["linktypes"], document.getElementById("deletelink_linktypes"))
         arrayToOptions(data["nodetypes"], document.getElementById("nodetypes"))
         arrayToOptions(data["nodetypes"], document.getElementById("node_property_group"))
+        arrayToOptions(data["nodetypes"], document.getElementById("deletenodes_nodetypes"))
         updateLegend(data["nodetypes"], data["linktypes"])
     });
 }
@@ -95,7 +97,12 @@ function send_form(event, form, callback, cbargument, fetchcbs, fetchcbargs) {
 }
 
 function send(url, data, callbacks, cbarguments, fetchcbs, fetchcbargs) {
-    fetch(url, {method: 'post', body: data}).then(res => {
+    fetch(url, {method: 'post', body: data}).then(res => res.text()).then(text => {
+        if (text != "Success") {
+            alert(text);
+            return;
+        }
+
         for (var i in fetchcbs) {
             var callback = fetchcbs[i];
             var cbargument = fetchcbargs[i];
@@ -262,6 +269,14 @@ function add_nodetype(event, form) {
 
 function add_linktype(event, form) {
     send_form(event, form, [clear_input], [['addlinktype_name']], [get_metadata], [undefined])
+}
+
+function delete_nodetype(event, form) {
+    send_form(event, form, [], [['removenodetype_name']], [get_metadata], [undefined])
+}
+
+function delete_linktype(event, form) {
+    send_form(event, form, [], [['removelinktype_name']], [get_metadata], [undefined])
 }
 
 function edit_node(event, form) {

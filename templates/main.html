@@ -47,6 +47,18 @@
                         <input class="btn" type="submit" value="Add Category">
                     </form>
                 </div>
+                <div class="form">
+                    <form action="./api/deletenodetype" onsubmit="delete_nodetype(event, this)">
+                        <select id="deletenodes_nodetypes" name="type"></select>
+                        <input class="btn red" type="submit" value="Delete Group">
+                    </form>
+                </div>
+                <div class="form">
+                    <form action="./api/deletelinktype" onsubmit="delete_linktype(event, this)">
+                        <select id="deletelink_linktypes" name="type"></select>
+                        <input class="btn red" type="submit" value="Delete Category">
+                    </form>
+                </div>
             </div>
 
             <div id="edit_card">
