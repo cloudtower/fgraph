@@ -51,8 +51,24 @@ function updateLegend(nodetypes, linktypes) {
     legend_nodes.innerHTML = "";
     legend_links.innerHTML = "";
 
-    for (i in nodetypes) {
-        var data = nodetypes[i][1];
+    nodetypes_order = [];
+    for (i of jsonData.nodes) {
+        nodetypes_order.push(i.group);
+    }
+    nodetypes_order = [...new Set(nodetypes_order)]
+
+    linktypes_order = [];
+    for (i of jsonData.links) {
+        linktypes_order.push(i.type);
+    }
+    linktypes_order = [...new Set(linktypes_order)]
+
+    for (i of nodetypes_order) {
+        for (j of nodetypes) {
+            if (j[0] == i) {
+                var data = j[1];
+            }
+        }
         var node_wrap = document.createElement("p");
         node_wrap.style = "display: flex; margin: 0"
         var circ = document.createElement("p");
@@ -67,8 +83,12 @@ function updateLegend(nodetypes, linktypes) {
         legend_nodes.appendChild(node_wrap)
     }
 
-    for (i in linktypes) {
-        var data = linktypes[i][1];
+    for (i of linktypes_order) {
+        for (j of linktypes) {
+            if (j[0] == i) {
+                var data = j[1];
+            }
+        }
         var node_wrap = document.createElement("p");
         node_wrap.style = "display: flex; margin: 0"
         var circ = document.createElement("p");
